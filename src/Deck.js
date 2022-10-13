@@ -1,19 +1,32 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
+import axios from "axios";
 
-const BASE_URL = 'https://drive.google.com/file/d/1g3BaU9A_RcIxGprgrDqyqyozDqBLOtgi/view?usp=sharing';
+const BASE_CARD_API_URL = 'http://deckofcardsapi.com/api/deck';
 
 function Deck(){
-    const [deck, setDeck] = useState(null)
+    const [deck, setDeck] = useState(null);
+    const [cards, setCards] = useState([]);
 
-    const getDeck = async () => {
-        console.log('get deck')
-        return await axios.get(BASE_URL)
+    async function getDeck(){
+        const res = await axios.get(`${BASE_CARD_API_URL}/new/shuffle?deck_count=1`)
+        setDeck(res.data);
+        console.log("Deck", deck)
+    };
+
+    async function getCards(){
+        const res = await axios.get(`${BASE_CARD_API_URL}/${deck.deck_id}/draw/?count=52`);
+        setCards(res.data.cards);
+        console.log(cards)
     }
-    setDeck(getDeck);
+
+    useEffect(() => getDeck, []);
+    useEffect(()=> getCards, [deck]);
+
 
     return (
-        <>
-            <h2>Deck</h2>
-        </>
+        <h2> Deck </h2>
     )
 }
+
+
+export default Deck;
