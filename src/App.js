@@ -4,7 +4,7 @@ import Deck from "./Deck";
 function App() {
   return (
     <div className="App">
-      <h1>Cards</h1>
+      <h1> Card Deck </h1>
       <Deck/>
     </div>
   );
