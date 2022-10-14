@@ -8,19 +8,19 @@ function getAngle(){
     // generate a random angle between 0-40 with pos or neg direction for cards
     const angle = Math.floor(Math.random() * 40);
     const direction = (Math.random() < 0.5) ? '-' : ''; // pos or neg angle
-    return direction + angle + 'deg'
+
+    return direction + angle
 }
 
 
 function Deck(){
-    const [deck, setDeck] = useState(null);
+    const [deckId, setDeckId] = useState(null);
     const [cards, setCards] = useState([]);
 
     async function getDeck(){
         try{
             const res = await axios.get(`${BASE_CARD_API_URL}/new/shuffle?deck_count=1`);
-            const { deck_id } = res.data
-            setDeck(deck_id);
+            setDeckId(res.data.deck_id);
             setCards([]);
         }
         catch(e){ console.log(e) }
@@ -28,7 +28,7 @@ function Deck(){
 
     async function getCards(){
         try{
-            const res = await axios.get(`${BASE_CARD_API_URL}/${deck}/draw`);
+            const res = await axios.get(`${BASE_CARD_API_URL}/${deckId}/draw`);
             if(res.data.remaining === 0) alert('Out of cards');
             const newCard = res.data.cards[0];
             newCard.angle = getAngle();
@@ -52,7 +52,7 @@ function Deck(){
                          alt={`${c.value} of ${c.suit}`}
                          key={c.code}
                          className='card'
-                         style={{transform: `rotate(${c.angle})`}}
+                         style={{transform: `rotate(${c.angle}deg)`}}
                     ></img>)
                 )}
             </div>
