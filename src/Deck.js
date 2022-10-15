@@ -1,21 +1,13 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useRef} from "react";
 import axios from "axios";
+import {BASE_CARD_API_URL, getAngle} from './helpers';
 import "./Deck.css";
-
-const BASE_CARD_API_URL = 'http://deckofcardsapi.com/api/deck';
-
-function getAngle(){
-    // generate a random angle between 0-40 with pos or neg direction for cards
-    const angle = Math.floor(Math.random() * 40);
-    const direction = (Math.random() < 0.5) ? '-' : ''; // pos or neg angle
-
-    return direction + angle
-}
-
 
 function Deck(){
     const [deckId, setDeckId] = useState(null);
     const [cards, setCards] = useState([]);
+    const [autoDraw, setAutoDraw] = useState(false);
+    const autoTimer = useRef(null);
 
     async function getDeck(){
         try{
@@ -26,23 +18,41 @@ function Deck(){
         catch(e){ console.log(e) }
     };
 
-    async function getCards(){
+    async function getCard(){
         try{
             const res = await axios.get(`${BASE_CARD_API_URL}/${deckId}/draw`);
-            if(res.data.remaining === 0) alert('Out of cards');
             const newCard = res.data.cards[0];
             newCard.angle = getAngle();
             setCards([...cards, newCard]);
+
+            if(res.data.remaining === 0) alert('Out of cards');
         }
         catch(e){ console.log(e) }
     }
 
+    function toggleAutoDraw(){
+        setAutoDraw(autoDraw => !autoDraw);
+    }
+
     useEffect(() => getDeck, []);
+    useEffect(() => {
+        if(autoDraw && !autoTimer.current){
+            autoTimer.current = setInterval(async () => {
+                                    await getCard()}, 1000);
+        }
+        if (!autoDraw) {
+            clearInterval(autoTimer.current);
+            autoTimer.current = null;
+        }
+    })
 
     return (
         <>
+            {autoDraw && <p className="auto-draw-msg">Auto Drawing Cards</p>}
             <div className="button-container">
-                <button onClick={getCards}>Draw Card</button>
+                <button onClick={getCard}>Draw Card</button>
+                {autoDraw && <button onClick={toggleAutoDraw} className='auto-drawing-btn'> Auto Draw </button>}
+                {!autoDraw && <button onClick={toggleAutoDraw}> Auto Draw</button>}
                 <button onClick={getDeck}> New Deck </button>
             </div>
 

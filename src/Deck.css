@@ -11,6 +11,14 @@ h1 {
     font-weight: bolder;
     color: whitesmoke;
     text-shadow: 1px 1px black;
+    margin-top: 25px;
+    margin-bottom: 0;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20%;
 }
 
 button {
@@ -23,19 +31,31 @@ button {
     box-shadow: 1px 1px black;
 }
 
-.button-container {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 20%;
+button:hover {
+    background-color: black;
+    border: 2px solid black;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.auto-drawing-btn{
+    background-color: black;
+    border: 2px solid black;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.auto-drawing-btn:hover{
+    background-color: grey;
 }
 
 .card {
     position: absolute;
 }
 
-button:hover {
-    background-color: black;
-    border: 2px solid black;
-    font-weight: bold;
-    cursor: pointer;
+.auto-draw-msg{
+    text-align: center;
+    margin: 5px;
+    color: rgb(163, 0, 0);
+    font-size: larger;
 }
