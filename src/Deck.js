@@ -51,8 +51,9 @@ function Deck(){
             {autoDraw && <p className="auto-draw-msg">Auto Drawing Cards</p>}
             <div className="button-container">
                 <button onClick={getCard}>Draw Card</button>
-                {autoDraw && <button onClick={toggleAutoDraw} className='auto-drawing-btn'> Auto Draw </button>}
-                {!autoDraw && <button onClick={toggleAutoDraw}> Auto Draw</button>}
+                <button className={autoDraw ? 'auto-drawing-btn' : null}
+                        onClick={toggleAutoDraw}> Auto Draw
+                </button>
                 <button onClick={getDeck}> New Deck </button>
             </div>
 
