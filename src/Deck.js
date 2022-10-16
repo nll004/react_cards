@@ -21,9 +21,7 @@ function Deck(){
     async function getCard(){
         try{
             const res = await axios.get(`${BASE_CARD_API_URL}/${deckId}/draw`);
-            const newCard = res.data.cards[0];
-            newCard.angle = getAngle();
-            setCards([...cards, newCard]);
+            setCards(cards => [...cards, {...res.data.cards[0], angle: getAngle()}]);
 
             if(res.data.remaining === 0) alert('Out of cards');
         }
